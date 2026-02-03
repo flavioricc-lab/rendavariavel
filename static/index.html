@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Fundamentalista Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>📊 Inserir Dados</h2>
+            </div>
+
+            <div class="section">
+                <h3>💾 Carteiras</h3>
+                <select id="portfolioSelect">
+                    <option value="">Selecione...</option>
+                </select>
+                <div class="btn-group">
+                    <button onclick="handlePortfolioLoad()" class="btn-primary">Carregar</button>
+                    <button onclick="deletePortfolio()" class="btn-danger">Excluir</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>📥 Entrada Manual</h3>
+                <div class="input-group">
+                    <label>Tickers (sep. por vírgula)</label>
+                    <textarea id="manualTickers" rows="3" placeholder="PETR4, VALE3, WEGE3..."></textarea>
+                </div>
+                <button onclick="handleManualSearch()" class="btn-primary" style="margin-top: 0.5rem;"
+                    id="btnManualSearch">Buscar</button>
+            </div>
+
+            <div class="section">
+                <h3>📂 Carregar Arquivo</h3>
+                <input type="file" id="fileInput" accept=".csv, .xlsx, .xls"
+                    style="margin-bottom: 0.5rem; width: 100%;">
+                <button onclick="uploadFile()" class="btn-primary">Carregar Planilha</button>
+            </div>
+
+            <div class="section">
+                <h3>💾 Salvar</h3>
+                <input type="text" id="newPortfolioName" placeholder="Nome da Carteira">
+                <button onclick="savePortfolio()" class="btn-secondary">Salvar Carteira</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <h1>Dashboard Fundamentalista</h1>
+                <div class="status-bar" id="statusBar">Pronto</div>
+            </header>
+
+            <section class="analysis-section">
+                <h3>📋 Comparativo de Ativos</h3>
+                <div class="table-container">
+                    <table id="analysisTable">
+                        <thead>
+                            <tr id="tableHeader">
+                                <!-- Headers injected via JS -->
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div class="divider"></div>
+
+            <section class="details-section">
+                <div class="info-panel">
+                    <h3>ℹ️ Detalhes</h3>
+                    <select id="assetSelect" onchange="updateChart()" style="margin-bottom: 1rem;">
+                        <option value="">Selecione um ativo...</option>
+                    </select>
+                    <div id="assetDetails">
+                        <p>Selecione um ativo para ver detalhes.</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>📈 Histórico & Indicadores</h3>
+                    <div class="controls">
+
+                        <select id="indicatorSelect" onchange="updateChart()">
+                            <option value="Preço Atual">Preço Atual</option>
+                            <option value="Preço Justo (Graham)">Preço Justo (Graham)</option>
+                            <option value="Preço Teto (6%)">Preço Teto (6%)</option>
+                            <option value="LPA">LPA</option>
+                            <option value="VPA">VPA</option>
+                        </select>
+                    </div>
+                    <div id="chartDiv"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

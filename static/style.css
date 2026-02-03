@@ -1,0 +1,236 @@
+:root {
+    --bg-color: #0e1117;
+    --sidebar-bg: #262730;
+    --text-color: #fafafa;
+    --accent-color: #ff4b4b;
+    --accent-hover: #ff3333;
+    --border-color: #31333f;
+    --table-header-bg: #1f2128;
+    --success-color: #00cc96;
+    --danger-color: #ef553b;
+    --card-bg: #1A1C24;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    padding: 1.5rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    border-right: 1px solid var(--border-color);
+}
+
+.brand h2 {
+    margin: 0;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.section h3 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #a0a0a0;
+    letter-spacing: 0.05em;
+}
+
+select,
+input,
+textarea {
+    width: 100%;
+    background-color: #0e1117;
+    border: 1px solid var(--border-color);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    /* Fix width issues */
+}
+
+.btn-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background 0.2s;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-danger {
+    background-color: transparent;
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+}
+
+.btn-danger:hover {
+    background-color: rgba(239, 85, 59, 0.1);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent-color);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.status-bar {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+
+/* Table */
+.table-container {
+    overflow-x: auto;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--table-header-bg);
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Colors for positive/negative */
+.val-positive {
+    color: var(--success-color);
+}
+
+.val-negative {
+    color: var(--danger-color);
+}
+
+/* Details Section */
+.details-section {
+    display: flex;
+    gap: 2rem;
+    /* height: 450px; Remove fixed height */
+}
+
+.chart-container {
+    flex: 2;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-panel {
+    flex: 1;
+    background: var(--card-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--border-color);
+    width: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}

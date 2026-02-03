@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pandas
+yfinance
+numpy
+fundamentus
+pydantic
+python-multipart
+openpyxl
+lxml
