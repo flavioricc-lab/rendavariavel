@@ -246,6 +246,13 @@ def get_market_data(tickers_filter=None):
         print(f"Erro ao acessar dados do mercado: {e}")
         return pd.DataFrame()
 
+def extrair_tickers_texto(texto):
+    """
+    Extracts tickers (e.g. PETR4, VALE3) from raw text using regex.
+    """
+    regex = re.compile(r'\b[A-Z]{4}[0-9]{1,2}\b')
+    return list(set([t.upper() for t in regex.findall(texto)]))
+
 def extrair_tickers_planilha(df):
     todos_valores = df.astype(str).values.flatten()
     regex = re.compile(r'^[A-Z]{4}[0-9]{1,2}$')

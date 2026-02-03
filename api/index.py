@@ -29,26 +29,27 @@ async def upload_file(file: UploadFile = File(...)):
         content = await file.read()
         
         if file.filename.endswith('.csv'):
-            # Try common encodings and automatic separator detection
+            # For CSV, be robust: read as text and use regex to find tickers
+            # This avoids "ParserError: Expected X fields, saw Y"
             try:
-                # First try UTF-8 with automatic separator detection
-                df = pd.read_csv(io.BytesIO(content), sep=None, engine='python', encoding='utf-8')
-            except Exception:
-                # Fallback to Latin-1 if UTF-8 fails (common in Brazilian Excel exports)
-                df = pd.read_csv(io.BytesIO(content), sep=None, engine='python', encoding='latin-1')
+                texto = content.decode('utf-8')
+            except UnicodeDecodeError:
+                texto = content.decode('latin-1')
+            tickers = core.extrair_tickers_texto(texto)
         elif file.filename.endswith(('.xls', '.xlsx')):
             df = pd.read_excel(io.BytesIO(content))
+            tickers = core.extrair_tickers_planilha(df)
         else:
             raise HTTPException(status_code=400, detail="Formato inválido. Use .csv ou .xlsx")
             
-        tickers = core.extrair_tickers_planilha(df)
         return {"tickers": tickers}
         
     except Exception as e:
         import traceback
         traceback.print_exc()
         # Return the error message to help the user identify the issue
-        msg = f"Erro ao processar {file.filename}: {str(e)}"
+        # Added (V2-Robust) tag to verify deployment
+        msg = f"Erro (V2-Robust) ao processar {file.filename}: {str(e)}"
         raise HTTPException(status_code=500, detail=msg)
 
 @app.get("/api/portfolios")
