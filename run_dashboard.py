@@ -13,5 +13,5 @@ if __name__ == "__main__":
     # We use "analise_acoes.web:app" string to enable reload support if needed,
     # but programmatically we can pass the app object if reload is False.
     # For reload=True, we must use the import string.
-    # Run Uvicorn - loading as module 'web' since we added path
-    uvicorn.run("web:app", host="0.0.0.0", port=8000, reload=True)
+    # Run Uvicorn - loading from api/index.py
+    uvicorn.run("api.index:app", host="0.0.0.0", port=8000, reload=True)
