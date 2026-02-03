@@ -121,17 +121,15 @@ async function uploadFile() {
             body: formData
         });
 
-        if (!res.ok) throw new Error('Falha no upload');
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(errorData.detail || 'Falha no upload');
+        }
 
         const data = await res.json();
         const tickers = data.tickers;
 
         if (tickers && tickers.length > 0) {
-            // manualTickers.value = tickers.join(', '); // Don't populate manual if exclusive? 
-            // Actually, for file upload, previously we showed found tickers in manual. 
-            // If exclusive, maybe just render directly. 
-            // Or populate manual and use it as "Manual Mode" initiated by file.
-            // Let's populate manual field as feedback but ensure Logic treats it as "File Loaded"
             manualTickers.value = tickers.join(', ');
             setStatus(`${tickers.length} ativos encontrados no arquivo.`);
             fetchAndRender(tickers);
@@ -140,7 +138,7 @@ async function uploadFile() {
         }
 
     } catch (e) {
-        setStatus('Erro ao processar arquivo.');
+        setStatus(`Erro: ${e.message}`);
         console.error(e);
     }
 }

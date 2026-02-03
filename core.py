@@ -1,6 +1,13 @@
 import pandas as pd
+import tempfile
+import os
+
+# Define writable directory for cache and data
+TEMP_DIR = tempfile.gettempdir()
+
 import requests_cache
-requests_cache.install_cache('http_cache', expire_after=3600)
+cache_path = os.path.join(TEMP_DIR, 'http_cache')
+requests_cache.install_cache(cache_path, expire_after=3600)
 import fundamentus
 import yfinance as yf
 import re
@@ -16,17 +23,25 @@ TEMP_PORTFOLIO_FILE = os.path.join(tempfile.gettempdir(), 'portfolios.json')
 # Determine writable file
 ACTIVE_PORTFOLIO_FILE = LOCAL_PORTFOLIO_FILE
 try:
-    # Try to open for append to check writability without overwriting
+    # On Vercel, the app directory is read-only. 
+    # Try to check if we can write to the local file.
     if os.path.exists(LOCAL_PORTFOLIO_FILE):
         with open(LOCAL_PORTFOLIO_FILE, 'a'):
             pass
     else:
-        # Try to create if doesn't exist (will fail if dir is RO)
+        # If it doesn't exist, try creating it. This will fail on Vercel.
         with open(LOCAL_PORTFOLIO_FILE, 'w') as f:
             f.write("{}")
 except (OSError, IOError, PermissionError):
     # Fallback to temp if readonly
     ACTIVE_PORTFOLIO_FILE = TEMP_PORTFOLIO_FILE
+    # If temp file doesn't exist, try to seed it from local if it exists
+    if not os.path.exists(TEMP_PORTFOLIO_FILE) and os.path.exists(LOCAL_PORTFOLIO_FILE):
+        try:
+            import shutil
+            shutil.copy2(LOCAL_PORTFOLIO_FILE, TEMP_PORTFOLIO_FILE)
+        except Exception:
+            pass
 
 def get_historical_financials(ticker_symbol):
     """

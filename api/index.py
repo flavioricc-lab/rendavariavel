@@ -29,7 +29,13 @@ async def upload_file(file: UploadFile = File(...)):
         content = await file.read()
         
         if file.filename.endswith('.csv'):
-            df = pd.read_csv(io.BytesIO(content))
+            # Try common encodings and automatic separator detection
+            try:
+                # First try UTF-8 with automatic separator detection
+                df = pd.read_csv(io.BytesIO(content), sep=None, engine='python', encoding='utf-8')
+            except Exception:
+                # Fallback to Latin-1 if UTF-8 fails (common in Brazilian Excel exports)
+                df = pd.read_csv(io.BytesIO(content), sep=None, engine='python', encoding='latin-1')
         elif file.filename.endswith(('.xls', '.xlsx')):
             df = pd.read_excel(io.BytesIO(content))
         else:
@@ -39,8 +45,11 @@ async def upload_file(file: UploadFile = File(...)):
         return {"tickers": tickers}
         
     except Exception as e:
-        print(f"Erro no upload: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        import traceback
+        traceback.print_exc()
+        # Return the error message to help the user identify the issue
+        msg = f"Erro ao processar {file.filename}: {str(e)}"
+        raise HTTPException(status_code=500, detail=msg)
 
 @app.get("/api/portfolios")
 def get_portfolios():
